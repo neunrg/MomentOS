@@ -1544,7 +1544,34 @@
     .cta-band-light { padding: var(--spacing-xl) var(--spacing-lg); }
     .carousel { padding: var(--spacing-xl) var(--spacing-lg); }
     .slide blockquote { font-size: 19px; }
-    .how-head-row { flex-direction: column; align-items: flex-start; }
+    /* How it works on phones: the chip strip is the selector, the open step sits
+       directly beneath it — so the screen preview stays on one viewport */
+    .how-head-row { flex-direction: column; align-items: stretch; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+    .how-head-row .nav-pill-group {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+    }
+    .how-head-row .nav-pill-group::-webkit-scrollbar { display: none; }
+    .how-head-row .category-tab { flex: 0 0 auto; padding: 10px 14px; font-size: 13.5px; scroll-snap-align: center; }
+    .how-layout { gap: var(--spacing-md); }
+    .how-preview { padding: var(--spacing-md); }
+    .preview-label { flex-wrap: wrap; row-gap: 4px; }
+    /* only the open step is shown; the strip above carries the other three */
+    .step-row { display: none; }
+    .step-row[aria-selected="true"] {
+      display: grid;
+      transform: none;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-1);
+      box-shadow: var(--shadow-xs);
+    }
     .faq-q { padding: var(--spacing-md); font-size: 15.5px; }
     .faq-a .inner { padding: 0 var(--spacing-md) var(--spacing-md); }
     .mockup-summary { gap: 14px; }
@@ -1559,6 +1586,16 @@
     .hero-eyebrow { border-radius: var(--rounded-xl); align-items: flex-start; }
     .hero-eyebrow .dot { margin-top: 6px; }
     .boundary-item p, .safeguard-problem, .safeguard-solution { font-size: 14.5px; }
+  }
+
+  @media (max-width: 500px) {
+    /* import preview: fit Name / Date / Result on screen instead of a sideways scroll */
+    .mini-table { min-width: 0; font-size: 12.5px; table-layout: fixed; }
+    .mini-table th, .mini-table td { padding: 9px 6px; }
+    .mini-table th:nth-child(2), .mini-table td:nth-child(2) { display: none; }
+    .mini-table td { white-space: normal; }
+    .mini-table th:last-child, .mini-table td:last-child { text-align: right; }
+    .tag-ok, .tag-flag { font-size: 11.5px; }
   }
 
   @media (max-width: 480px) {
@@ -2443,8 +2480,31 @@
       if (on) p.removeAttribute("hidden"); else p.setAttribute("hidden", "");
     });
   }
+  /* on phones the chip strip, the open step and its screen stack in one column —
+     keep that stack in view so a tap never leaves the preview off-screen */
+  function focusStepOnMobile() {
+    if (!window.matchMedia("(max-width: 768px)").matches) return;
+    var strip = document.querySelector(".how-head-row .nav-pill-group");
+    var panel = document.querySelector(".how-preview");
+    if (!strip || !panel) return;
+    var vh = window.innerHeight;
+    var stripTop = strip.getBoundingClientRect().top;
+    var panelTop = panel.getBoundingClientRect().top;
+    var stripOk = stripTop >= 60 && stripTop <= vh * 0.35;
+    var panelOk = panelTop <= vh - 260;
+    if (stripOk && panelOk) return;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({
+      top: Math.max(0, (window.pageYOffset || document.documentElement.scrollTop) + stripTop - 72),
+      behavior: reduce ? "auto" : "smooth"
+    });
+  }
+
   stepTabs.forEach(function (t) {
-    t.addEventListener("click", function () { selectStep(t.getAttribute("data-step")); });
+    t.addEventListener("click", function () {
+      selectStep(t.getAttribute("data-step"));
+      focusStepOnMobile();
+    });
     t.addEventListener("keydown", function (e) {
       arrowNav(e, t, "data-step", function (v) { selectStep(v); });
     });
