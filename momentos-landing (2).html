@@ -1,0 +1,2663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MomentOS — Never forget a client's moment again</title>
+<meta name="description" content="MomentOS remembers every client's birthday and anniversary, greets the family too, and sends personal WhatsApp greetings safely — one review, one click a day.">
+<meta property="og:title" content="MomentOS — Never forget a client's moment again">
+<meta property="og:description" content="Birthdays and anniversaries remembered. Family included. One WhatsApp click a day.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='12'%20y1='12'%20x2='52'%20y2='52'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20offset='0.1'%20stop-color='%23111111'/%3E%3Cstop%20offset='1'%20stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23f4f5f7'/%3E%3Ccircle%20cx='32'%20cy='32'%20r='17.5'%20fill='none'%20stroke='%23111111'%20stroke-opacity='0.08'%20stroke-width='5'/%3E%3Ccircle%20cx='32'%20cy='32'%20r='15'%20fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js");</script>
+<style>
+  :root {
+    /* ---------- Palette (unchanged semantics, verified contrast) ---------- */
+    --colors-canvas: #ffffff;
+    --colors-primary: #111111;
+    --colors-primary-active: #242424;
+    --colors-brand-accent: #3b82f6;
+    --colors-badge-orange: #fb923c;
+    --colors-badge-pink: #ec4899;
+    --colors-badge-violet: #8b5cf6;
+    --colors-badge-emerald: #34d399;
+    --colors-surface-soft: #f7f8fa;
+    --colors-surface-card: #f2f4f6;
+    --colors-surface-strong: #e5e7eb;
+    --colors-surface-dark: #0d0e11;
+    --colors-surface-dark-elevated: #16181d;
+    --colors-hairline: #e5e7eb;
+    --colors-hairline-soft: #eef0f3;
+    --colors-ink: #111111;
+    --colors-body: #374151;
+    --colors-muted: #5d6675;
+    --colors-muted-soft: #666e7a;
+    --colors-on-primary: #ffffff;
+    --colors-on-dark: #ffffff;
+    --colors-on-dark-soft: #a8adb6;
+    --colors-success: #10b981;
+    --colors-warning: #f59e0b;
+    --colors-error: #ef4444;
+
+    /* ---------- Surface hierarchy (glassmorphism) ---------- */
+    --glass-1: rgba(255, 255, 255, 0.62);      /* L1 — primary glass cards   */
+    --glass-2: rgba(255, 255, 255, 0.42);      /* L2 — supporting / chips     */
+    --glass-dense: rgba(255, 255, 255, 0.84);  /* L1 dense — text-heavy glass */
+    --solid: #ffffff;                          /* L3 — inputs, tables, bubbles */
+    --glass-border: rgba(255, 255, 255, 0.78);
+    --glass-edge: rgba(16, 24, 40, 0.08);
+    --glass-edge-soft: rgba(16, 24, 40, 0.055);
+    --blur-sm: 8px;
+    --blur-md: 16px;
+    --blur-lg: 24px;
+
+    /* ---------- Typography ---------- */
+    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    /* ---------- Radius ---------- */
+    --rounded-xs: 6px;
+    --rounded-sm: 8px;
+    --rounded-md: 10px;
+    --rounded-lg: 14px;
+    --rounded-xl: 18px;
+    --rounded-2xl: 24px;
+    --rounded-pill: 9999px;
+    --rounded-full: 9999px;
+
+    /* ---------- Spacing (4px base) ---------- */
+    --spacing-xxs: 4px;
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+    --spacing-section: 96px;
+
+    /* ---------- Controls ---------- */
+    --control-h: 44px;
+    --control-h-lg: 48px;
+    --input-h: 44px;
+
+    /* ---------- Elevation ---------- */
+    --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 6px -2px rgba(16, 24, 40, 0.08);
+    --shadow-md: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 20px -8px rgba(16, 24, 40, 0.14);
+    --shadow-lg: 0 2px 4px rgba(16, 24, 40, 0.04), 0 18px 40px -16px rgba(16, 24, 40, 0.22);
+    --shadow-xl: 0 4px 10px rgba(16, 24, 40, 0.05), 0 30px 60px -24px rgba(16, 24, 40, 0.28);
+    --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 2px rgba(16, 24, 40, 0.05), 0 16px 36px -20px rgba(16, 24, 40, 0.28);
+
+    /* ---------- Motion ---------- */
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-io: cubic-bezier(0.4, 0, 0.2, 1);
+    --dur-fast: 140ms;
+    --dur: 220ms;
+    --dur-slow: 340ms;
+
+    color-scheme: light;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    scroll-padding-top: calc(84px + env(safe-area-inset-top, 0px));
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--colors-canvas);
+    color: var(--colors-body);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* ---------- Ambient backdrop: gives glass something to refract ---------- */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(58rem 40rem at 10% -8%, rgba(59, 130, 246, 0.13), transparent 62%),
+      radial-gradient(48rem 34rem at 92% 2%, rgba(139, 92, 246, 0.11), transparent 60%),
+      radial-gradient(54rem 40rem at 50% 104%, rgba(52, 211, 153, 0.13), transparent 58%),
+      radial-gradient(36rem 28rem at 84% 52%, rgba(236, 72, 153, 0.07), transparent 62%),
+      var(--colors-canvas);
+  }
+
+  img, svg { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+
+  ::selection { background: rgba(59, 130, 246, 0.18); }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+
+  /* ---------- Typography ---------- */
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--colors-ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .display-xl { font-size: clamp(36px, 5.1vw, 64px); line-height: 1.06; letter-spacing: -0.032em; }
+  .display-lg { font-size: clamp(32px, 4vw, 48px); line-height: 1.1; letter-spacing: -0.028em; }
+  .display-md { font-size: clamp(28px, 3.1vw, 36px); line-height: 1.16; letter-spacing: -0.024em; }
+  .display-sm { font-size: clamp(24px, 2.4vw, 28px); line-height: 1.2; letter-spacing: -0.018em; }
+  .title-lg { font-size: 22px; line-height: 1.3; letter-spacing: -0.015em; font-weight: 600; }
+  .title-md { font-size: 18px; line-height: 1.4; font-weight: 600; }
+  .title-sm { font-size: 16px; line-height: 1.4; font-weight: 600; }
+  .body-md { font-size: 16px; line-height: 1.55; font-weight: 400; }
+  .body-sm { font-size: 14px; line-height: 1.5; font-weight: 400; }
+  .caption { font-size: 13px; line-height: 1.4; font-weight: 500; }
+  .code { font-family: var(--font-mono); font-size: 14px; line-height: 1.5; }
+
+  p { margin: 0; text-wrap: pretty; }
+
+  .hl {
+    background: linear-gradient(transparent 60%, rgba(52, 211, 153, 0.38) 60%);
+    padding: 0 2px;
+  }
+
+  /* ---------- Layout rhythm ---------- */
+  section { padding: var(--spacing-section) 0; }
+  .band-soft {
+    background: linear-gradient(180deg, rgba(247, 248, 250, 0.78), rgba(247, 248, 250, 0.58));
+    border-top: 1px solid rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid rgba(16, 24, 40, 0.04);
+  }
+
+  /* ---------- Scroll progress ---------- */
+  .scroll-progress {
+    position: fixed;
+    top: env(safe-area-inset-top, 0px);
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--colors-primary), var(--colors-brand-accent));
+    z-index: 60;
+    transition: width 80ms linear;
+  }
+
+  /* ---------- Nav (L1 glass, real blur: content scrolls beneath) ---------- */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: calc(64px + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.7);
+    backdrop-filter: blur(var(--blur-md)) saturate(1.7);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur) var(--ease-io), box-shadow var(--dur) var(--ease-io), background var(--dur) var(--ease-io);
+  }
+  .top-nav.scrolled {
+    background: rgba(255, 255, 255, 0.84);
+    border-bottom-color: var(--glass-edge-soft);
+    box-shadow: 0 10px 30px -22px rgba(16, 24, 40, 0.4);
+  }
+  .top-nav .wrap {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.022em;
+    color: var(--colors-ink);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .wordmark-dot {
+    width: 10px; height: 10px;
+    border-radius: var(--rounded-full);
+    background: linear-gradient(135deg, #111111 10%, var(--colors-brand-accent) 140%);
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.07);
+    flex-shrink: 0;
+  }
+  .nav-menu {
+    display: flex;
+    gap: var(--spacing-xl);
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  .nav-menu a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-body);
+    position: relative;
+    padding-bottom: 3px;
+    white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-io);
+  }
+  .nav-menu a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 100%; height: 1.5px;
+    background: var(--colors-ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur) var(--ease);
+  }
+  .nav-menu a:hover::after,
+  .nav-menu a.active::after { transform: scaleX(1); }
+  .nav-menu a.active { color: var(--colors-ink); }
+
+  .nav-actions { display: flex; align-items: center; gap: var(--spacing-md); }
+  .nav-phone { font-size: 14px; font-weight: 500; color: var(--colors-muted); white-space: nowrap; transition: color var(--dur-fast); }
+  .nav-phone:hover { color: var(--colors-ink); }
+
+  .hamburger {
+    display: none;
+    width: 44px; height: 44px;
+    border: 1px solid var(--glass-edge);
+    background: var(--glass-2);
+    border-radius: var(--rounded-md);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background var(--dur-fast), border-color var(--dur-fast);
+  }
+  .hamburger:hover { background: rgba(255, 255, 255, 0.72); border-color: rgba(16, 24, 40, 0.16); }
+  .hamburger span {
+    display: block;
+    width: 17px; height: 1.6px;
+    background: var(--colors-ink);
+    position: relative;
+    transition: background 150ms ease;
+  }
+  .hamburger span::before,
+  .hamburger span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 17px; height: 1.6px;
+    background: var(--colors-ink);
+    transition: transform 260ms var(--ease), top 260ms var(--ease);
+  }
+  .hamburger span::before { top: -5.5px; }
+  .hamburger span::after { top: 5.5px; }
+  .hamburger[aria-expanded="true"] span { background: transparent; }
+  .hamburger[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+  .hamburger[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+  /* ---------- Mobile sheet (L1 glass + blur; animated, not display-toggled) ---------- */
+  .mobile-sheet {
+    position: fixed;
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    right: 0; bottom: 0; left: 0;
+    background: rgba(255, 255, 255, 0.88);
+    -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(1.6);
+    backdrop-filter: blur(var(--blur-lg)) saturate(1.6);
+    z-index: 45;
+    padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-xxl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur);
+  }
+  .mobile-sheet.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+  }
+  .mobile-sheet a.m-link {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--colors-ink);
+    padding: 15px 0;
+    border-bottom: 1px solid var(--colors-hairline-soft);
+    transition: color var(--dur-fast), padding-left var(--dur) var(--ease);
+  }
+  .mobile-sheet a.m-link:hover { padding-left: 6px; color: var(--colors-brand-accent); }
+  .mobile-sheet .btn { margin-top: var(--spacing-md); width: 100%; }
+  .mobile-sheet .btn:first-of-type { margin-top: var(--spacing-xl); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: var(--control-h);
+    padding: 0 20px;
+    border-radius: var(--rounded-md);
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: background var(--dur-fast) var(--ease-io), transform var(--dur-fast) var(--ease-io),
+                border-color var(--dur-fast) var(--ease-io), color var(--dur-fast) var(--ease-io),
+                box-shadow var(--dur-fast) var(--ease-io);
+  }
+  .btn-primary {
+    background: linear-gradient(180deg, #1d1d20 0%, var(--colors-primary) 55%);
+    color: var(--colors-on-primary);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 1px 2px rgba(16, 24, 40, 0.18), 0 8px 18px -10px rgba(16, 24, 40, 0.55);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(180deg, #26262a 0%, var(--colors-primary-active) 55%);
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 4px rgba(16, 24, 40, 0.18), 0 12px 24px -12px rgba(16, 24, 40, 0.6);
+  }
+  .btn-primary:active { transform: translateY(0) scale(0.985); background: var(--colors-primary-active); }
+  .btn-primary:disabled { opacity: 0.66; transform: none; cursor: default; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 2px rgba(16, 24, 40, 0.16); }
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--colors-ink);
+    border-color: var(--glass-edge);
+    box-shadow: var(--shadow-xs);
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+    backdrop-filter: blur(var(--blur-sm));
+  }
+  .btn-secondary:hover { background: #ffffff; border-color: rgba(16, 24, 40, 0.16); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .btn-secondary:active { transform: translateY(0) scale(0.985); }
+  .btn-lg { height: var(--control-h-lg); padding: 0 26px; font-size: 15px; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding-top: 72px; padding-bottom: var(--spacing-section); }
+  .hero .wrap {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: var(--spacing-xxl);
+    align-items: center;
+  }
+  .hero-text > * { animation: riseIn 720ms var(--ease) both; }
+  .hero-text > *:nth-child(1) { animation-delay: 40ms; }
+  .hero-text > *:nth-child(2) { animation-delay: 110ms; }
+  .hero-text > *:nth-child(3) { animation-delay: 180ms; }
+  .hero-text > *:nth-child(4) { animation-delay: 250ms; }
+  .hero-text > *:nth-child(5) { animation-delay: 320ms; }
+  .hero-visual { position: relative; animation: riseIn 820ms var(--ease) 220ms both; }
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--glass-2);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-xs);
+    border-radius: var(--rounded-pill);
+    padding: 7px 15px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--colors-muted);
+    margin-bottom: var(--spacing-lg);
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+    backdrop-filter: blur(var(--blur-sm));
+  }
+  .hero-eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--colors-success);
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45); }
+    70% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+  .hero h1 { margin-bottom: var(--spacing-lg); max-width: 640px; }
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.62;
+    color: var(--colors-muted);
+    max-width: 540px;
+    margin-bottom: var(--spacing-xl);
+  }
+  .hero-actions { display: flex; gap: var(--spacing-md); align-items: center; flex-wrap: wrap; }
+  .hero-note {
+    font-size: 13px;
+    color: var(--colors-muted-soft);
+    margin-top: var(--spacing-md);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 8px;
+  }
+  .hero-note svg { flex-shrink: 0; margin-top: 3px; }
+
+  /* stat strip — one glass panel, four metrics */
+  .stat-strip {
+    grid-column: 1 / -1;
+    order: 3;
+    margin-top: var(--spacing-xxl);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    background: var(--glass-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-xl);
+    box-shadow: var(--shadow-glass);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+  }
+  .stat .num {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    color: var(--colors-ink);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .num .suffix { font-size: 20px; letter-spacing: -0.02em; color: var(--colors-muted); }
+  .stat .lbl { font-size: 13.5px; color: var(--colors-muted); margin-top: 6px; line-height: 1.45; max-width: 210px; }
+
+  /* ---------- Hero mockup (L1 glass + blur, focal surface) ---------- */
+  .hero-app-mockup-card {
+    background: var(--glass-1);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.6);
+    backdrop-filter: blur(var(--blur-md)) saturate(1.6);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-2xl);
+    box-shadow: var(--shadow-glass);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+  .mockup-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--glass-edge-soft);
+    background: rgba(255, 255, 255, 0.55);
+  }
+  .mockup-topbar-left { display: flex; align-items: center; gap: 10px; }
+  .mockup-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--colors-success); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16); }
+  .mockup-title { font-size: 14px; font-weight: 600; color: var(--colors-ink); }
+  .mockup-date { font-size: 12px; color: var(--colors-muted-soft); }
+  .mockup-body { padding: 16px 18px; }
+  .mockup-summary {
+    display: flex;
+    gap: 18px;
+    padding-bottom: 14px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--glass-edge-soft);
+  }
+  .mockup-stat .num { font-size: 20px; font-weight: 600; letter-spacing: -0.03em; color: var(--colors-ink); font-variant-numeric: tabular-nums; }
+  .mockup-stat .lbl { font-size: 11.5px; color: var(--colors-muted); margin-top: 2px; }
+
+  .greet-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 8px;
+    margin: 0 -8px;
+    border-radius: var(--rounded-sm);
+    border-bottom: 1px solid var(--glass-edge-soft);
+    transition: background 200ms ease, opacity 200ms ease;
+  }
+  .greet-row:last-of-type { border-bottom: none; }
+  .greet-row:hover { background: rgba(255, 255, 255, 0.5); }
+  .greet-avatar {
+    width: 32px; height: 32px;
+    border-radius: var(--rounded-full);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--colors-ink);
+    flex-shrink: 0;
+    transition: transform 250ms var(--ease);
+  }
+  .greet-row[data-state="sending"] .greet-avatar { transform: scale(1.08); }
+  .greet-info { flex: 1; min-width: 0; }
+  .greet-name { font-size: 13.5px; font-weight: 600; color: var(--colors-ink); }
+  .greet-occasion { font-size: 12px; color: var(--colors-muted-soft); }
+  .greet-status {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--rounded-pill);
+    flex-shrink: 0;
+    transition: background 200ms ease, color 200ms ease;
+  }
+  .status-sent { background: rgba(16, 185, 129, 0.14); color: #046c4b; }
+  .status-ready { background: rgba(255, 255, 255, 0.72); color: var(--colors-muted); border: 1px solid var(--glass-edge-soft); }
+  .status-sending { background: rgba(59, 130, 246, 0.12); color: #1d4ed8; }
+
+  .mockup-cta {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--glass-edge-soft);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mockup-send-btn {
+    background: linear-gradient(180deg, #1d1d20 0%, var(--colors-primary) 55%);
+    color: var(--colors-on-primary);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 12px 18px;
+    border-radius: var(--rounded-md);
+    flex: 1;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 14px -8px rgba(16, 24, 40, 0.5);
+    transition: background 150ms ease, transform 150ms var(--ease-io), box-shadow 150ms ease;
+  }
+  .mockup-send-btn:hover { background: linear-gradient(180deg, #26262a 0%, var(--colors-primary-active) 55%); transform: translateY(-1px); }
+  .mockup-send-btn:active { transform: translateY(0) scale(0.99); }
+  .mockup-send-btn:disabled { cursor: default; opacity: 0.78; transform: none; }
+  .mockup-progress { font-size: 12px; color: var(--colors-muted-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mockup-hint {
+    font-size: 11.5px;
+    color: var(--colors-muted-soft);
+    text-align: left;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.5;
+    transition: opacity var(--dur);
+  }
+  .mockup-hint kbd {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--glass-edge);
+    border-bottom-width: 2px;
+    border-radius: var(--rounded-xs);
+    padding: 1px 6px;
+    color: var(--colors-muted);
+  }
+  .mockup-flash {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 185, 129, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .mockup-flash.go { animation: flash 700ms ease; }
+  @keyframes flash { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* ---------- Pill groups / tabs ---------- */
+  .nav-pill-group {
+    display: inline-flex;
+    background: var(--glass-2);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-pill);
+    padding: 5px;
+    gap: 4px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-xs);
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+    backdrop-filter: blur(var(--blur-sm));
+  }
+  .band-soft .nav-pill-group { background: rgba(255, 255, 255, 0.66); border-color: var(--glass-edge-soft); }
+  .category-tab {
+    padding: 8px 15px;
+    border-radius: var(--rounded-pill);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-muted);
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    font-family: var(--font-body);
+    transition: background var(--dur-fast) var(--ease-io), color var(--dur-fast) var(--ease-io),
+                box-shadow var(--dur-fast) var(--ease-io), border-color var(--dur-fast) var(--ease-io);
+    white-space: nowrap;
+  }
+  .category-tab:hover { color: var(--colors-ink); }
+  .category-tab[aria-selected="true"] {
+    background: var(--colors-canvas);
+    color: var(--colors-ink);
+    border-color: var(--glass-edge-soft);
+    box-shadow: var(--shadow-sm);
+    font-weight: 600;
+  }
+
+  /* ---------- Section heads ---------- */
+  .section-head { max-width: 680px; margin-bottom: var(--spacing-xxl); }
+  .section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+  .section-eyebrow-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--colors-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+  .section-eyebrow-label::before {
+    content: "";
+    width: 18px; height: 1.5px;
+    background: var(--colors-ink);
+    opacity: 0.35;
+  }
+  .section-head.center .section-eyebrow-label::before { display: none; }
+  .section-head h2 { margin-bottom: var(--spacing-md); }
+  .section-head .sub { font-size: 17px; color: var(--colors-muted); line-height: 1.62; }
+
+  /* ---------- Grids & cards (L1 glass, no blur — backdrop is a smooth field) ---------- */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-lg); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-lg); }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); }
+
+  .feature-card {
+    background: var(--glass-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease-io);
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-lg);
+  }
+  .feature-icon {
+    width: 42px; height: 42px;
+    border-radius: var(--rounded-md);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.6));
+    border: 1px solid var(--glass-edge-soft);
+    box-shadow: var(--shadow-xs);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: var(--spacing-lg);
+    transition: transform var(--dur) var(--ease);
+  }
+  .feature-card:hover .feature-icon { transform: translateY(-2px); }
+  .feature-card h3 { font-size: 18px; margin-bottom: var(--spacing-sm); }
+  .feature-card p { color: var(--colors-muted); font-size: 15px; line-height: 1.6; }
+
+  .value-card {
+    background: var(--glass-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease-io);
+  }
+  .value-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-lg);
+  }
+  .value-card .kicker {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: var(--colors-ink);
+    opacity: 0.48;
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+    transition: opacity var(--dur) var(--ease-io);
+  }
+  .value-card:hover .kicker { opacity: 0.65; }
+  .value-card .title-sm { margin-bottom: 8px; }
+  .value-card p { color: var(--colors-muted); font-size: 14.5px; line-height: 1.6; }
+
+  .product-mockup-card {
+    background: var(--glass-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* ---------- How it works ---------- */
+  .how-head-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xxl);
+    flex-wrap: wrap;
+  }
+  .how-head-row .section-head { margin-bottom: 0; }
+
+  .how-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: var(--spacing-xxl);
+    align-items: start;
+  }
+  /* grid items must be allowed to shrink below their content's min-width,
+     otherwise the scrollable import table widens the whole page */
+  .how-layout > * { min-width: 0; }
+  .steps-list { display: flex; flex-direction: column; }
+  .step-row {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-md);
+    border: none;
+    border-bottom: 1px solid var(--colors-hairline-soft);
+    border-radius: var(--rounded-md);
+    cursor: pointer;
+    transition: background var(--dur) var(--ease-io), transform var(--dur) var(--ease);
+    text-align: left;
+    background: transparent;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+  }
+  .step-row:hover { background: rgba(255, 255, 255, 0.7); }
+  .step-row[aria-selected="true"] {
+    background: var(--glass-1);
+    border-bottom-color: transparent;
+    box-shadow: var(--shadow-sm);
+    transform: translateX(4px);
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num {
+    width: 36px; height: 36px;
+    border-radius: var(--rounded-full);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--glass-edge);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600;
+    color: var(--colors-muted);
+    font-variant-numeric: tabular-nums;
+    transition: background var(--dur) var(--ease-io), color var(--dur) var(--ease-io), border-color var(--dur) var(--ease-io), transform var(--dur) var(--ease);
+  }
+  .step-row:hover .step-num { transform: scale(1.05); }
+  .step-row[aria-selected="true"] .step-num {
+    background: var(--colors-primary);
+    border-color: var(--colors-primary);
+    color: var(--colors-on-primary);
+    box-shadow: 0 6px 14px -8px rgba(16, 24, 40, 0.7);
+  }
+  .step-row h3 { font-size: 17px; margin-bottom: 5px; }
+  .step-row p { color: var(--colors-muted); font-size: 14.5px; line-height: 1.6; }
+
+  .how-preview {
+    position: sticky;
+    top: 96px;
+    background: var(--glass-1);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+    backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-xl);
+    box-shadow: var(--shadow-glass);
+    padding: var(--spacing-lg);
+    min-height: 400px;
+  }
+  .preview-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--colors-muted-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .panel { animation: panelIn 300ms var(--ease); }
+  .panel[hidden] { display: none; }
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* import table — L3 solid, built for scanning */
+  .table-scroll {
+    overflow-x: auto;
+    background: var(--solid);
+    border: 1px solid var(--colors-hairline);
+    border-radius: var(--rounded-md);
+    box-shadow: var(--shadow-xs);
+  }
+  .mini-table { width: 100%; min-width: 420px; border-collapse: collapse; font-size: 13.5px; }
+  .mini-table th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--colors-muted-soft);
+    font-weight: 600;
+    padding: 9px 12px;
+    background: var(--colors-surface-soft);
+    border-bottom: 1px solid var(--colors-hairline);
+    white-space: nowrap;
+  }
+  .mini-table td {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--colors-hairline-soft);
+    color: var(--colors-body);
+    white-space: nowrap;
+  }
+  .mini-table tbody tr:last-child td { border-bottom: none; }
+  .mini-table tbody tr { transition: background var(--dur-fast); }
+  .mini-table tbody tr:hover { background: rgba(59, 130, 246, 0.04); }
+  .tag-ok { color: #047857; font-weight: 600; font-size: 12.5px; }
+  .tag-flag { color: #b45309; font-weight: 600; font-size: 12.5px; }
+
+  /* client card panel */
+  .client-card {
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid var(--glass-edge-soft);
+    border-radius: var(--rounded-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-xs);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .client-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+  .client-card .meta { flex: 1; min-width: 0; }
+  .client-card .nm { font-size: 14px; font-weight: 600; color: var(--colors-ink); }
+  .client-card .ph { font-size: 12.5px; color: var(--colors-muted-soft); font-family: var(--font-mono); }
+  .occ-chip {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: var(--rounded-pill);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--glass-edge-soft);
+    color: var(--colors-body);
+    white-space: nowrap;
+  }
+
+  /* template editor */
+  .tpl-field { margin-bottom: var(--spacing-md); }
+  .tpl-field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--colors-muted);
+    margin-bottom: 7px;
+  }
+  .tpl-input {
+    width: 100%;
+    height: var(--input-h);
+    padding: 0 14px;
+    border: 1px solid var(--colors-hairline);
+    border-radius: var(--rounded-md);
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--colors-ink);
+    background: var(--solid);
+    box-shadow: var(--shadow-xs);
+    transition: border-color var(--dur-fast) var(--ease-io), box-shadow var(--dur-fast) var(--ease-io);
+  }
+  .tpl-input::placeholder { color: #9aa1ac; }
+  .tpl-input:hover { border-color: var(--colors-surface-strong); }
+  .tpl-input:focus {
+    outline: none;
+    border-color: var(--colors-ink);
+    box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.08);
+  }
+  .tpl-preview {
+    background: rgba(247, 248, 250, 0.85);
+    border: 1px solid var(--glass-edge-soft);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-md);
+  }
+  .wa-bubble {
+    background: var(--solid);
+    border: 1px solid var(--colors-hairline);
+    border-radius: var(--rounded-lg) var(--rounded-lg) var(--rounded-lg) 5px;
+    padding: 12px 14px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--colors-body);
+    position: relative;
+    box-shadow: var(--shadow-sm);
+  }
+  .wa-bubble .wa-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: var(--colors-muted-soft);
+  }
+  .wa-time { display: inline-flex; align-items: center; gap: 4px; }
+  .name-token {
+    background: rgba(59, 130, 246, 0.13);
+    color: #1d4ed8;
+    border-radius: 4px;
+    padding: 0 4px;
+    font-weight: 600;
+    transition: background 180ms ease;
+  }
+  .char-count { font-size: 12px; color: var(--colors-muted-soft); margin-top: 6px; display: flex; justify-content: space-between; gap: 12px; }
+
+  /* send panel */
+  .send-run { display: flex; flex-direction: column; gap: 10px; }
+  .send-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 13px;
+    border: 1px solid var(--glass-edge-soft);
+    border-radius: var(--rounded-md);
+    font-size: 13.5px;
+    color: var(--colors-body);
+    background: rgba(255, 255, 255, 0.72);
+    transition: border-color 200ms ease, background 200ms ease, transform 200ms var(--ease);
+  }
+  .send-line .dotstate {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--colors-surface-strong);
+    flex-shrink: 0;
+    transition: background 200ms ease, box-shadow 200ms ease;
+  }
+  .send-line.done { border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.07); }
+  .send-line.done .dotstate { background: var(--colors-success); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16); }
+  .send-line.active { border-color: rgba(59, 130, 246, 0.45); background: rgba(59, 130, 246, 0.06); transform: translateX(3px); }
+  .send-line.active .dotstate { background: var(--colors-brand-accent); animation: pulse 1.2s infinite; }
+  .send-line .who { flex: 1; }
+  .send-line .state { font-size: 12px; color: var(--colors-muted-soft); }
+
+  .pace-note {
+    margin-top: var(--spacing-md);
+    font-size: 12.5px;
+    color: var(--colors-muted);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid var(--glass-edge-soft);
+    border-radius: var(--rounded-md);
+    padding: 11px 13px;
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    line-height: 1.55;
+  }
+
+  /* ---------- Safeguards (dense content → high-contrast surface) ---------- */
+  .safeguard-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+  }
+  .safeguard-toolbar .hint { font-size: 13.5px; color: var(--colors-muted-soft); }
+  .safeguard-table {
+    background: var(--glass-dense);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .safeguard-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xxl);
+    padding: 14px var(--spacing-xl);
+    background: rgba(247, 248, 250, 0.9);
+    border-bottom: 1px solid var(--colors-hairline);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--colors-muted);
+  }
+  .safeguard-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xxl);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--colors-hairline-soft);
+    align-items: start;
+    transition: background 180ms ease, opacity 180ms ease;
+  }
+  .safeguard-row:last-child { border-bottom: none; }
+  .safeguard-row:hover { background: rgba(255, 255, 255, 0.72); }
+  .safeguard-problem {
+    color: var(--colors-muted);
+    font-size: 15px;
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+  }
+  .safeguard-problem .xmark {
+    width: 21px; height: 21px;
+    border-radius: var(--rounded-xs);
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--colors-error);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .safeguard-solution {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--colors-body);
+    display: flex;
+    gap: 10px;
+  }
+  .safeguard-solution .ckmark {
+    width: 21px; height: 21px;
+    border-radius: var(--rounded-xs);
+    background: rgba(16, 185, 129, 0.14);
+    color: #047857;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .safeguard-solution strong { color: var(--colors-ink); font-weight: 600; }
+
+  .safeguard-table[data-mode="problem"] .safeguard-solution,
+  .safeguard-table[data-mode="problem"] .safeguard-head .col-solution { display: none; }
+  .safeguard-table[data-mode="solution"] .safeguard-problem,
+  .safeguard-table[data-mode="solution"] .safeguard-head .col-problem { display: none; }
+  .safeguard-table[data-mode="problem"] .safeguard-row,
+  .safeguard-table[data-mode="solution"] .safeguard-row,
+  .safeguard-table[data-mode="problem"] .safeguard-head,
+  .safeguard-table[data-mode="solution"] .safeguard-head { grid-template-columns: 1fr; }
+  .safeguard-table[data-mode="problem"] .safeguard-row { background: rgba(239, 68, 68, 0.04); }
+  .safeguard-table[data-mode="solution"] .safeguard-row { background: rgba(16, 185, 129, 0.05); }
+
+  /* ---------- WhatsApp connect ---------- */
+  .qr-card {
+    background: var(--glass-2);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+  }
+  .qr-box {
+    width: 96px; height: 96px;
+    background: var(--solid);
+    border: 1px solid var(--colors-hairline);
+    border-radius: var(--rounded-md);
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-xs);
+  }
+  .qr-box svg { width: 100%; height: 100%; }
+  .qr-scanline {
+    position: absolute;
+    left: 6px; right: 6px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--colors-success), transparent);
+    top: 8px;
+    animation: scan 2.6s ease-in-out infinite;
+    opacity: 0.85;
+  }
+  @keyframes scan {
+    0%, 100% { top: 8px; }
+    50% { top: 84px; }
+  }
+  .connect-list { display: flex; flex-direction: column; gap: 10px; margin-top: var(--spacing-lg); }
+  .connect-item { display: flex; gap: 10px; font-size: 14.5px; color: var(--colors-body); line-height: 1.55; }
+  .connect-item svg { flex-shrink: 0; margin-top: 3px; }
+
+  /* ---------- Industries ---------- */
+  .industries-wrap { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    background: var(--glass-2);
+    border: 1px solid var(--glass-border);
+    color: var(--colors-body);
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: var(--rounded-pill);
+    padding: 9px 16px;
+    cursor: pointer;
+    box-shadow: var(--shadow-xs);
+    transition: all 160ms var(--ease-io);
+    font-family: inherit;
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+    backdrop-filter: blur(var(--blur-sm));
+  }
+  .badge-pill:hover {
+    border-color: rgba(16, 24, 40, 0.2);
+    color: var(--colors-ink);
+    background: rgba(255, 255, 255, 0.75);
+    transform: translateY(-1px);
+  }
+  .badge-pill[aria-pressed="true"] {
+    background: linear-gradient(180deg, #1d1d20, var(--colors-primary));
+    border-color: var(--colors-primary);
+    color: var(--colors-on-primary);
+    box-shadow: 0 8px 18px -10px rgba(16, 24, 40, 0.7);
+    font-weight: 600;
+  }
+  .industry-detail {
+    margin: var(--spacing-xl) auto 0;
+    max-width: 680px;
+    background: var(--glass-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-lg);
+    text-align: left;
+    min-height: 108px;
+    box-shadow: var(--shadow-md);
+    transition: opacity 260ms var(--ease), transform 260ms var(--ease);
+  }
+  .industry-detail .ind-name { font-size: 16px; font-weight: 600; color: var(--colors-ink); margin-bottom: 6px; }
+  .industry-detail .ind-copy { font-size: 15px; color: var(--colors-muted); line-height: 1.62; }
+  .industry-detail .ind-eg {
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--colors-body);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--glass-edge-soft);
+    border-radius: var(--rounded-md);
+    padding: 9px 13px;
+    display: inline-block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    line-height: 1.55;
+  }
+
+  /* ---------- Quote carousel ---------- */
+  .carousel {
+    position: relative;
+    background: var(--glass-1);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+    backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-xl);
+    padding: var(--spacing-xxl);
+    overflow: hidden;
+    box-shadow: var(--shadow-glass);
+  }
+  .slides { position: relative; min-height: 190px; }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateX(18px);
+    transition: opacity 380ms var(--ease), transform 380ms var(--ease);
+    pointer-events: none;
+  }
+  .slide.active { opacity: 1; transform: none; pointer-events: auto; position: relative; }
+  .slide blockquote {
+    margin: 0 0 var(--spacing-lg);
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.5;
+    letter-spacing: -0.018em;
+    color: var(--colors-ink);
+    font-weight: 500;
+  }
+  .quote-attrib { display: flex; align-items: center; gap: 12px; }
+  .avatar-circle {
+    width: 36px; height: 36px;
+    border-radius: var(--rounded-full);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    color: var(--colors-ink);
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+  }
+  .quote-name { font-size: 14px; font-weight: 600; color: var(--colors-ink); }
+  .quote-role { font-size: 13px; color: var(--colors-muted); }
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--glass-edge-soft);
+  }
+  .dots { display: flex; gap: 8px; }
+  .dot-btn {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: rgba(16, 24, 40, 0.2);
+    cursor: pointer;
+    transition: background 160ms ease, width 160ms var(--ease), border-radius 160ms ease;
+  }
+  .dot-btn:hover { background: rgba(16, 24, 40, 0.45); }
+  .dot-btn[aria-current="true"] { background: var(--colors-primary); width: 20px; border-radius: var(--rounded-pill); }
+  .arrow-row { display: flex; gap: 8px; }
+  .btn-icon-circle {
+    width: 38px; height: 38px;
+    border-radius: var(--rounded-full);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--glass-edge);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--colors-ink);
+    transition: background 150ms ease, border-color 150ms ease, transform 150ms var(--ease-io);
+    padding: 0;
+  }
+  .btn-icon-circle:hover { background: #ffffff; border-color: rgba(16, 24, 40, 0.18); transform: translateY(-1px); }
+  .btn-icon-circle:active { transform: translateY(0) scale(0.95); }
+  #pauseBtn .ico-play { display: none; }
+  #pauseBtn.is-paused .ico-pause { display: none; }
+  #pauseBtn.is-paused .ico-play { display: block; }
+  .rating-stars { display: inline-flex; gap: 2px; margin-bottom: var(--spacing-md); }
+
+  /* ---------- Boundaries ---------- */
+  .boundary-list { display: flex; flex-direction: column; }
+  .boundary-item {
+    display: flex;
+    gap: 14px;
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--colors-hairline-soft);
+  }
+  .boundary-item:last-child { border-bottom: none; }
+  .boundary-mark {
+    width: 24px; height: 24px;
+    border-radius: var(--rounded-xs);
+    background: var(--glass-2);
+    border: 1px solid var(--glass-edge-soft);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .boundary-item p { color: var(--colors-body); font-size: 15px; line-height: 1.6; }
+  .boundary-item strong { color: var(--colors-ink); }
+
+  /* ---------- FAQ ---------- */
+  .faq-list {
+    background: var(--glass-dense);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .faq-item { border-bottom: 1px solid var(--colors-hairline-soft); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--colors-ink);
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    transition: background 150ms ease;
+  }
+  .faq-q:hover { background: rgba(255, 255, 255, 0.7); }
+  .faq-icon {
+    width: 26px; height: 26px;
+    border-radius: var(--rounded-full);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--glass-edge-soft);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--colors-ink);
+    transition: transform 300ms var(--ease), background 220ms var(--ease-io), color 220ms var(--ease-io), border-color 220ms var(--ease-io);
+  }
+  .faq-q[aria-expanded="true"] .faq-icon {
+    transform: rotate(135deg);
+    background: var(--colors-primary);
+    color: var(--colors-on-primary);
+    border-color: var(--colors-primary);
+  }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 320ms var(--ease);
+  }
+  .faq-a .inner {
+    padding: 0 var(--spacing-xl) var(--spacing-lg);
+    color: var(--colors-muted);
+    font-size: 15px;
+    line-height: 1.68;
+    max-width: 760px;
+  }
+
+  /* ---------- CTA ---------- */
+  .cta-band-light {
+    background: var(--glass-1);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+    backdrop-filter: blur(var(--blur-md)) saturate(1.5);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-2xl);
+    padding: var(--spacing-xxl);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-glass);
+  }
+  .cta-band-light::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 90% at 20% 0%, rgba(59, 130, 246, 0.1), transparent 65%),
+      radial-gradient(60% 90% at 85% 100%, rgba(52, 211, 153, 0.12), transparent 65%);
+    pointer-events: none;
+  }
+  .cta-band-light > * { position: relative; }
+  .cta-band-light h2 { margin-bottom: var(--spacing-sm); }
+  .cta-band-light .sub { color: var(--colors-muted); font-size: 17px; margin-bottom: var(--spacing-xl); }
+  .cta-band-actions { display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap; }
+  .cta-meta {
+    margin-top: var(--spacing-lg);
+    font-size: 13px;
+    color: var(--colors-muted-soft);
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* ---------- Footer (L3 solid — maximum readability) ---------- */
+  .footer {
+    background:
+      radial-gradient(120% 120% at 50% 0%, var(--colors-surface-dark-elevated), var(--colors-surface-dark) 62%);
+    color: var(--colors-on-dark-soft);
+    padding: 64px 0 calc(40px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: var(--spacing-xl);
+    padding-bottom: var(--spacing-xxl);
+  }
+  .footer-brand .wordmark { color: var(--colors-on-dark); margin-bottom: var(--spacing-md); }
+  .footer-brand .wordmark-dot { background: var(--colors-on-dark); box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1); }
+  .footer-brand p { font-size: 14px; line-height: 1.65; color: var(--colors-on-dark-soft); max-width: 280px; }
+  .footer-col h3 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--colors-on-dark);
+    margin: 0 0 var(--spacing-md);
+    font-family: var(--font-body);
+  }
+  .footer-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--spacing-sm); }
+  .footer-col a {
+    font-size: 14px;
+    color: var(--colors-on-dark-soft);
+    transition: color 150ms ease, transform 150ms var(--ease-io);
+    display: inline-block;
+  }
+  .footer-col a:hover { color: var(--colors-on-dark); transform: translateX(3px); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 13px;
+    color: #9096a0;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ---------- Reveal ---------- */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 560ms var(--ease), transform 560ms var(--ease);
+  }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .reveal[data-delay="1"] { transition-delay: 80ms; }
+  .reveal[data-delay="2"] { transition-delay: 160ms; }
+  .reveal[data-delay="3"] { transition-delay: 240ms; }
+  .reveal[data-delay="4"] { transition-delay: 320ms; }
+
+  /* ---------- Mobile sticky CTA (fixed → real blur) ---------- */
+  .mobile-cta {
+    display: none;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 44;
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.6);
+    backdrop-filter: blur(var(--blur-md)) saturate(1.6);
+    border-top: 1px solid var(--glass-edge-soft);
+    box-shadow: 0 -10px 30px -22px rgba(16, 24, 40, 0.45);
+    padding: 10px var(--spacing-md) calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+  .mobile-cta .btn { width: 100%; height: var(--control-h-lg); }
+
+  /* ---------- Focus & utilities ---------- */
+  a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--colors-brand-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .btn:focus-visible, .badge-pill:focus-visible, .category-tab:focus-visible,
+  .btn-icon-circle:focus-visible, .hamburger:focus-visible, .dot-btn:focus-visible {
+    outline-offset: 3px;
+  }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    .js .reveal { opacity: 1; transform: none; }
+    .hero-text > *, .hero-visual { animation: none; }
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; row-gap: var(--spacing-xl); }
+    .nav-menu { gap: var(--spacing-lg); }
+    .nav-phone { display: none; }
+    .how-layout { grid-template-columns: 1fr; gap: var(--spacing-xl); }
+    .how-preview { position: static; min-height: 0; }
+    :root { --spacing-section: 80px; }
+  }
+
+  @media (max-width: 900px) {
+    .nav-menu, .nav-phone, .nav-actions .btn { display: none; }
+    .hamburger { display: flex; }
+    .hero .wrap { grid-template-columns: 1fr; gap: var(--spacing-xl); }
+    .hero-visual { order: 2; }
+    .hero-text { order: 1; }
+    .stat-strip { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg) var(--spacing-md); margin-top: var(--spacing-xl); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    section { padding: 64px 0; }
+    :root { --spacing-section: 64px; }
+    .hero { padding-top: 40px; padding-bottom: 64px; }
+    .grid-3, .grid-2, .grid-4 { grid-template-columns: 1fr; }
+    .safeguard-row { grid-template-columns: 1fr; gap: var(--spacing-md); padding: var(--spacing-lg) var(--spacing-md); }
+    .safeguard-head { display: none; }
+    .safeguard-table[data-mode="problem"] .safeguard-row,
+    .safeguard-table[data-mode="solution"] .safeguard-row { padding: var(--spacing-lg) var(--spacing-md); }
+    /* grid keeps icon + text on one line while the label spans above */
+    .safeguard-problem, .safeguard-solution {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      gap: 8px 10px;
+    }
+    .safeguard-problem::before, .safeguard-solution::before {
+      content: attr(data-label);
+      grid-column: 1 / -1;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--colors-muted);
+    }
+    .footer-top { grid-template-columns: 1fr; }
+    .cta-band-light { padding: var(--spacing-xl) var(--spacing-lg); }
+    .carousel { padding: var(--spacing-xl) var(--spacing-lg); }
+    .slide blockquote { font-size: 19px; }
+    .how-head-row { flex-direction: column; align-items: flex-start; }
+    .faq-q { padding: var(--spacing-md); font-size: 15.5px; }
+    .faq-a .inner { padding: 0 var(--spacing-md) var(--spacing-md); }
+    .mockup-summary { gap: 14px; }
+    .qr-card { flex-direction: column; align-items: flex-start; }
+    .stat-strip { padding: var(--spacing-md); }
+    .mobile-cta { display: block; }
+    .footer { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+    .btn { height: 46px; }
+    .btn-lg { height: 50px; }
+    .category-tab { padding: 9px 15px; }
+    .industry-detail { padding: var(--spacing-md); }
+    .hero-eyebrow { border-radius: var(--rounded-xl); align-items: flex-start; }
+    .hero-eyebrow .dot { margin-top: 6px; }
+    .boundary-item p, .safeguard-problem, .safeguard-solution { font-size: 14.5px; }
+  }
+
+  @media (max-width: 480px) {
+    .wrap { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+    .hero-actions .btn { width: 100%; }
+    .stat .num { font-size: 28px; }
+    .stat .lbl { font-size: 13px; }
+    .value-card .kicker { font-size: 22px; }
+    .step-row { padding: var(--spacing-md) var(--spacing-xs); grid-template-columns: 40px 1fr; }
+    .mockup-cta { flex-direction: column; align-items: stretch; gap: 8px; }
+    .mockup-progress { text-align: center; }
+    .cta-band-actions .btn { width: 100%; }
+    .carousel-controls { flex-wrap: wrap; gap: var(--spacing-sm); }
+    .quote-role { display: none; }
+  }
+
+  @media (min-width: 1440px) {
+    :root { --spacing-section: 112px; }
+    .hero { padding-top: 96px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<nav class="top-nav" id="topNav">
+  <div class="wrap">
+    <a href="#top" class="wordmark"><span class="wordmark-dot"></span>MomentOS</a>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="#value">Why it matters</a></li>
+      <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#safeguards">Why it's safe</a></li>
+      <li><a href="#industries">Who it's for</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="https://wa.me/917574996656" class="nav-phone">+91 75749 96656</a>
+      <a href="https://wa.me/917574996656" class="btn btn-primary">Message us on WhatsApp</a>
+      <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="mobileSheet" aria-label="Open menu"><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-sheet" id="mobileSheet">
+  <a class="m-link" href="#value">Why it matters</a>
+  <a class="m-link" href="#how-it-works">How it works</a>
+  <a class="m-link" href="#safeguards">Why it's safe</a>
+  <a class="m-link" href="#industries">Who it's for</a>
+  <a class="m-link" href="#boundaries">What it isn't</a>
+  <a class="m-link" href="#faq">FAQ</a>
+  <a class="btn btn-primary btn-lg" href="https://wa.me/917574996656">Message us on WhatsApp</a>
+  <a class="btn btn-secondary btn-lg" href="tel:+917574996656">Call +91 75749 96656</a>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <div class="hero-eyebrow"><span class="dot"></span>Built for businesses that know their clients by name</div>
+        <h1 class="display-xl">Never forget a client's <span class="hl">moment</span> again</h1>
+        <p class="hero-sub">MomentOS remembers every birthday and anniversary — including the client's family — and sends a personal WhatsApp greeting the moment it's due. You review once and press one button.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/917574996656" class="btn btn-primary btn-lg">Message us on WhatsApp</a>
+          <a href="#how-it-works" class="btn btn-secondary btn-lg">See how it works</a>
+        </div>
+        <p class="hero-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+          One business · one WhatsApp number · about 30 seconds a day
+        </p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-app-mockup-card">
+          <div class="mockup-flash" id="mockFlash"></div>
+          <div class="mockup-topbar">
+            <div class="mockup-topbar-left">
+              <span class="mockup-dot"></span>
+              <span class="mockup-title">Today</span>
+            </div>
+            <span class="mockup-date" id="mockDate">Fri, 26 Sep</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-summary">
+              <div class="mockup-stat"><div class="num" id="statDue">4</div><div class="lbl">Due today</div></div>
+              <div class="mockup-stat"><div class="num" id="statSent">2</div><div class="lbl">Sent</div></div>
+              <div class="mockup-stat"><div class="num" id="statLeft">2</div><div class="lbl">Left</div></div>
+            </div>
+
+            <div id="heroRows">
+              <div class="greet-row" data-state="sent">
+                <div class="greet-avatar" style="background:rgba(52,211,153,0.18)">RK</div>
+                <div class="greet-info">
+                  <div class="greet-name">Rahul Kapoor</div>
+                  <div class="greet-occasion">Birthday · client</div>
+                </div>
+                <span class="greet-status status-sent">Sent</span>
+              </div>
+              <div class="greet-row" data-state="sent">
+                <div class="greet-avatar" style="background:rgba(236,72,153,0.16)">SK</div>
+                <div class="greet-info">
+                  <div class="greet-name">Sunita Kapoor</div>
+                  <div class="greet-occasion">Birthday · Rahul's wife</div>
+                </div>
+                <span class="greet-status status-sent">Sent</span>
+              </div>
+              <div class="greet-row" data-state="ready">
+                <div class="greet-avatar" style="background:rgba(251,146,60,0.18)">AM</div>
+                <div class="greet-info">
+                  <div class="greet-name">Anita Mehta</div>
+                  <div class="greet-occasion">Anniversary · client</div>
+                </div>
+                <span class="greet-status status-ready">Ready</span>
+              </div>
+              <div class="greet-row" data-state="ready">
+                <div class="greet-avatar" style="background:rgba(139,92,246,0.16)">VP</div>
+                <div class="greet-info">
+                  <div class="greet-name">Vikram Patel</div>
+                  <div class="greet-occasion">Birthday · Vikram's father</div>
+                </div>
+                <span class="greet-status status-ready">Ready</span>
+              </div>
+            </div>
+
+            <div class="mockup-cta">
+              <button class="mockup-send-btn" id="mockSendBtn" type="button">Send Today's Greetings</button>
+              <span class="mockup-progress" id="mockProgress">2 of 4 done</span>
+            </div>
+            <div class="mockup-hint" id="mockHint">
+              <kbd>Try it</kbd> press send — a demo only, nothing leaves your browser
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-strip">
+        <div class="stat reveal">
+          <div class="num"><span data-count="1">0</span></div>
+          <div class="lbl">Button press per day — the whole daily job</div>
+        </div>
+        <div class="stat reveal" data-delay="1">
+          <div class="num"><span data-count="0">0</span></div>
+          <div class="lbl">Birthdays missed once your clients are in</div>
+        </div>
+        <div class="stat reveal" data-delay="2">
+          <div class="num"><span data-count="365">0</span><span class="suffix"> days</span></div>
+          <div class="lbl">Occasions tracked automatically, every year</div>
+        </div>
+        <div class="stat reveal" data-delay="3">
+          <div class="num"><span data-count="4">0</span><span class="suffix"> steps</span></div>
+          <div class="lbl">One-time setup — then it repeats on its own</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="band-soft">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow-label">The problem</div>
+        <h2 class="display-md">Relationships are the business.<br>Remembering them shouldn't be this hard.</h2>
+        <p class="sub">A birthday wish is how a client remembers you back. But checking a diary, hunting for the right number, and sending one by one doesn't scale — and it's the first thing quietly dropped in a busy week.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <h3>Someone gets missed</h3>
+          <p>Past a few dozen clients, no diary and no memory keeps up. A missed birthday is a missed chance to be remembered back.</p>
+        </div>
+        <div class="feature-card reveal" data-delay="1">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          </div>
+          <h3>The family gets left out</h3>
+          <p>Clients want their spouse and parents greeted too. That's more numbers to track by hand — and more places for mistakes.</p>
+        </div>
+        <div class="feature-card reveal" data-delay="2">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3>Manual sending doesn't scale</h3>
+          <p>Typing "Happy Birthday," attaching an image, sending — one contact at a time — works for five people. Not for five hundred.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE -->
+  <section id="value">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow-label">What you actually get</div>
+        <h2 class="display-md">Four things change the week you start</h2>
+        <p class="sub">Not features — outcomes. This is what businesses notice first after switching from a diary and a phone.</p>
+      </div>
+
+      <div class="grid-4">
+        <div class="value-card reveal">
+          <div class="kicker">01</div>
+          <div class="title-sm">You become the business that remembers</div>
+          <p>Your name lands on their phone on the right day, with their name in it. That's the difference between a vendor and a relationship.</p>
+        </div>
+        <div class="value-card reveal" data-delay="1">
+          <div class="kicker">02</div>
+          <div class="title-sm">The whole family gets greeted</div>
+          <p>Client, spouse, parents — each with their own number and their own occasion. One client becomes three warm touches.</p>
+        </div>
+        <div class="value-card reveal" data-delay="2">
+          <div class="kicker">03</div>
+          <div class="title-sm">30 seconds a day, not 30 minutes a year</div>
+          <p>Open Today, read the list, press send. The scrambling before Diwali season or New Year simply doesn't happen.</p>
+        </div>
+        <div class="value-card reveal" data-delay="3">
+          <div class="kicker">04</div>
+          <div class="title-sm">Sends you can actually trust</div>
+          <p>Paced like a human, never duplicated, never half-done. If the internet drops, it stops cleanly and resumes later.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" class="band-soft">
+    <div class="wrap">
+      <div class="how-head-row">
+        <div class="section-head">
+          <div class="section-eyebrow-label">How it works</div>
+          <h2 class="display-md">Set it up once. Then it's one click a day.</h2>
+          <p class="sub">Tap a step to see what that screen actually looks like.</p>
+        </div>
+        <div class="nav-pill-group" role="tablist" aria-label="Setup steps">
+          <button class="category-tab" role="tab" aria-selected="true" data-step="0">1 · Add clients</button>
+          <button class="category-tab" role="tab" aria-selected="false" data-step="1">2 · Record moments</button>
+          <button class="category-tab" role="tab" aria-selected="false" data-step="2">3 · Write once</button>
+          <button class="category-tab" role="tab" aria-selected="false" data-step="3">4 · Press send</button>
+        </div>
+      </div>
+
+      <div class="how-layout">
+        <div class="steps-list" role="tablist" aria-label="Steps detail">
+          <button class="step-row" role="tab" aria-selected="true" data-step="0">
+            <div class="step-num">1</div>
+            <div>
+              <h3>Add your clients</h3>
+              <p>Type them in, or import the spreadsheet you already keep — MomentOS reads the columns and date formats for you.</p>
+            </div>
+          </button>
+          <button class="step-row" role="tab" aria-selected="false" data-step="1">
+            <div class="step-num">2</div>
+            <div>
+              <h3>Record their moments</h3>
+              <p>Birthdays, anniversaries, anything worth tracking — plus WhatsApp numbers for the family members who should be greeted.</p>
+            </div>
+          </button>
+          <button class="step-row" role="tab" aria-selected="false" data-step="2">
+            <div class="step-num">3</div>
+            <div>
+              <h3>Prepare a greeting once</h3>
+              <p>Attach an image, write a template. Everyone still gets their own name — try it live in the preview.</p>
+            </div>
+          </button>
+          <button class="step-row" role="tab" aria-selected="false" data-step="3">
+            <div class="step-num">4</div>
+            <div>
+              <h3>Press send, every day it's due</h3>
+              <p>Open Today, review the list, press the button. Each message goes out individually, with a human-like pause between them.</p>
+            </div>
+          </button>
+        </div>
+
+        <div class="how-preview">
+          <!-- Panel 1: import -->
+          <div class="panel" data-panel="0">
+            <div class="preview-label"><span>Import · spreadsheet detected</span><span class="caption" style="color:#047857">142 rows ready</span></div>
+            <div class="table-scroll" tabindex="0" role="region" aria-label="Import preview table">
+            <table class="mini-table">
+              <thead>
+                <tr><th>Name</th><th>Occasion</th><th>Date</th><th>Result</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Rahul Kapoor</td><td>Birthday</td><td>26 Sep 1986</td><td class="tag-ok">Matched</td></tr>
+                <tr><td>Sunita Kapoor</td><td>Birthday</td><td>26 Sep 1988</td><td class="tag-ok">Matched</td></tr>
+                <tr><td>Anita Mehta</td><td>Anniversary</td><td>26 Sep 2011</td><td class="tag-ok">Matched</td></tr>
+                <tr><td>Vikram Patel</td><td>Birthday</td><td>26 Sep 1957</td><td class="tag-ok">Matched</td></tr>
+                <tr><td>Meera Joshi</td><td>Birthday</td><td>dd/mm/yyyy</td><td class="tag-flag">Confirm format</td></tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="pace-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" style="margin-top:2px;flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+              Unsure rows are flagged, never guessed. You confirm once and it's fixed forever.
+            </div>
+          </div>
+
+          <!-- Panel 2: client record -->
+          <div class="panel" data-panel="1" hidden>
+            <div class="preview-label"><span>Client record · Kapoor family</span></div>
+            <div class="client-card">
+              <div class="greet-avatar" style="background:rgba(52,211,153,0.18)">RK</div>
+              <div class="meta"><div class="nm">Rahul Kapoor</div><div class="ph">+91 98••• ••210</div></div>
+              <span class="occ-chip">🎂 26 Sep</span>
+            </div>
+            <div class="client-card">
+              <div class="greet-avatar" style="background:rgba(236,72,153,0.16)">SK</div>
+              <div class="meta"><div class="nm">Sunita Kapoor · spouse</div><div class="ph">+91 98••• ••744</div></div>
+              <span class="occ-chip">🎂 26 Sep</span>
+            </div>
+            <div class="client-card">
+              <div class="greet-avatar" style="background:rgba(139,92,246,0.16)">AK</div>
+              <div class="meta"><div class="nm">Arun Kapoor · father</div><div class="ph">+91 99••• ••018</div></div>
+              <span class="occ-chip">🎓 14 Mar</span>
+            </div>
+            <div class="pace-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" style="margin-top:2px;flex-shrink:0"><path d="M20 6L9 17l-5-5"/></svg>
+              Every occasion repeats on its own, year after year. You never re-add anything.
+            </div>
+          </div>
+
+          <!-- Panel 3: live template -->
+          <div class="panel" data-panel="2" hidden>
+            <div class="preview-label"><span>Live preview · type below and watch it fill in</span></div>
+            <div class="tpl-field">
+              <label for="tplName">Recipient's name</label>
+              <input class="tpl-input" id="tplName" type="text" value="Anita" maxlength="24" autocomplete="off" placeholder="e.g. Anita">
+            </div>
+            <div class="tpl-field">
+              <label for="tplBiz">Your business name</label>
+              <input class="tpl-input" id="tplBiz" type="text" value="Shree Studio" maxlength="28" autocomplete="off" placeholder="e.g. Shree Studio">
+            </div>
+            <div class="tpl-preview">
+              <div class="wa-bubble">
+                Dear <span class="name-token" id="outName">Anita</span>, wishing you a very Happy Anniversary! 🎉 Thank you for letting <span class="name-token" id="outBiz">Shree Studio</span> be part of your journey.
+                <div class="wa-meta"><span>WhatsApp</span><span class="wa-time">09:04 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+              </div>
+              <div class="char-count"><span>Template written once · name filled per person</span><span id="tplCount">0 chars</span></div>
+            </div>
+            <div class="pace-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" style="margin-top:2px;flex-shrink:0"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              It reads personal because, in the way that matters, it is — the name is theirs.
+            </div>
+          </div>
+
+          <!-- Panel 4: send run -->
+          <div class="panel" data-panel="3" hidden>
+            <div class="preview-label"><span>Today · press send</span></div>
+            <div class="send-run" id="sendRun">
+              <div class="send-line" data-i="0"><span class="dotstate"></span><span class="who">Rahul Kapoor · Birthday</span><span class="state">queued</span></div>
+              <div class="send-line" data-i="1"><span class="dotstate"></span><span class="who">Sunita Kapoor · Birthday</span><span class="state">queued</span></div>
+              <div class="send-line" data-i="2"><span class="dotstate"></span><span class="who">Anita Mehta · Anniversary</span><span class="state">queued</span></div>
+              <div class="send-line" data-i="3"><span class="dotstate"></span><span class="who">Vikram Patel's father · Birthday</span><span class="state">queued</span></div>
+            </div>
+            <button class="btn btn-primary" id="runDemoBtn" type="button" style="width:100%;margin-top:16px;">Run a demo send</button>
+            <div class="pace-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" style="margin-top:2px;flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              One at a time, with a human-like pause between each — gentler on WhatsApp, safer for your number.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFEGUARDS -->
+  <section id="safeguards">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow-label">Why it's safe</div>
+        <h2 class="display-md">It would rather do nothing than guess</h2>
+        <p class="sub">Sending by hand fails in predictable ways. Every one of them is caught before it happens.</p>
+      </div>
+
+      <div class="safeguard-toolbar">
+        <div class="nav-pill-group" role="tablist" aria-label="Comparison view">
+          <button class="category-tab" role="tab" aria-selected="true" data-mode="both">Side by side</button>
+          <button class="category-tab" role="tab" aria-selected="false" data-mode="problem">Manual pain</button>
+          <button class="category-tab" role="tab" aria-selected="false" data-mode="solution">MomentOS answer</button>
+        </div>
+        <span class="hint">Switch the view to focus either side.</span>
+      </div>
+
+      <div class="safeguard-table" id="safeguardTable" data-mode="both">
+        <div class="safeguard-head">
+          <div class="col-problem">Sending by hand</div>
+          <div class="col-solution">With MomentOS</div>
+        </div>
+
+        <div class="safeguard-row">
+          <div class="safeguard-problem" data-label="Sending by hand"><span class="xmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>You click send twice by accident, and the same person gets two birthday wishes.</div>
+          <div class="safeguard-solution" data-label="With MomentOS"><span class="ckmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span><span><strong>Duplicate protection</strong> — one greeting per person, per occasion, per day. A second click finds nothing left to send.</span></div>
+        </div>
+        <div class="safeguard-row">
+          <div class="safeguard-problem" data-label="Sending by hand"><span class="xmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>A number was typed wrong, and the message silently fails — or looks like it went through.</div>
+          <div class="safeguard-solution" data-label="With MomentOS"><span class="ckmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span><span>An invalid number is <strong>blocked and clearly marked</strong> — never attempted, never falsely shown as sent.</span></div>
+        </div>
+        <div class="safeguard-row">
+          <div class="safeguard-problem" data-label="Sending by hand"><span class="xmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>The internet drops halfway through fifty messages — now you don't know who got theirs.</div>
+          <div class="safeguard-solution" data-label="With MomentOS"><span class="ckmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span><span>The run <strong>stops safely</strong> at that exact point. Nothing is marked sent that wasn't delivered — press send again and it resumes.</span></div>
+        </div>
+        <div class="safeguard-row">
+          <div class="safeguard-problem" data-label="Sending by hand"><span class="xmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>One bad number in the batch, and you're unsure whether it stopped everyone else too.</div>
+          <div class="safeguard-solution" data-label="With MomentOS"><span class="ckmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span><span>Each person is sent to <strong>individually</strong>. One failure never blocks the rest — failures are listed for a single "Retry Failed" press.</span></div>
+        </div>
+        <div class="safeguard-row">
+          <div class="safeguard-problem" data-label="Sending by hand"><span class="xmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>Back-to-back blasting can look like spam and put your number at risk.</div>
+          <div class="safeguard-solution" data-label="With MomentOS"><span class="ckmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span><span>Messages go out <strong>one at a time, with a human-like pause</strong> — gentler on WhatsApp and safer for your number.</span></div>
+        </div>
+        <div class="safeguard-row">
+          <div class="safeguard-problem" data-label="Sending by hand"><span class="xmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>"Did Mrs. Sharma get her anniversary greeting yesterday?" — nobody's quite sure.</div>
+          <div class="safeguard-solution" data-label="With MomentOS"><span class="ckmark"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span><span>Every send is <strong>recorded as history</strong> — who, which occasion, when, and whether it succeeded.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHATSAPP CONNECTION -->
+  <section class="band-soft">
+    <div class="wrap">
+      <div class="grid-2" style="align-items: center; gap: var(--spacing-xxl);">
+        <div class="reveal">
+          <div class="section-eyebrow-label">Connecting WhatsApp</div>
+          <h2 class="display-sm" style="margin-bottom: var(--spacing-md);">Linked like WhatsApp Web. No password, ever.</h2>
+          <p class="body-md" style="color: var(--colors-muted); line-height: 1.6; margin-bottom: var(--spacing-lg);">Scan a QR code with the phone that runs your business's WhatsApp — exactly like linking WhatsApp Web. Messages go out from your own number, and the connection stays active without repeating setup daily.</p>
+          <div class="connect-list">
+            <div class="connect-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span>Send from your own business number — clients see you, not a bot.</span></div>
+            <div class="connect-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span>Your WhatsApp access lives in one protected place, separate from the screens you click.</span></div>
+            <div class="connect-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span>No password is ever asked for or stored.</span></div>
+          </div>
+        </div>
+        <div class="product-mockup-card reveal" data-delay="1">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--spacing-lg);">
+            <span class="title-sm">WhatsApp</span>
+            <span class="badge-pill" style="background: rgba(16,185,129,0.12); color:#047857; border-color: transparent; cursor: default;">Connected</span>
+          </div>
+          <div class="qr-card">
+            <div class="qr-box">
+              <div class="qr-scanline"></div>
+              <svg viewBox="0 0 24 24" fill="#111111"><path d="M3 3h7v7H3V3zm2 2v3h3V5H5zm9-2h7v7h-7V3zm2 2v3h3V5h-3zM3 14h7v7H3v-7zm2 2v3h3v-3H5zm9-2h3v3h-3v-3zm5 0h2v2h-2v-2zm-5 5h3v2h-3v-2zm5 0h2v2h-2v-2zm-2-2h2v2h-2v-2z"/></svg>
+            </div>
+            <div>
+              <div class="title-sm" style="margin-bottom:4px;">Scan to link</div>
+              <p class="body-sm" style="color: var(--colors-muted);">Business number stays linked once scanned — set up once, done.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRIES -->
+  <section id="industries">
+    <div class="wrap">
+      <div class="section-head center">
+        <div class="section-eyebrow-label">Who it's for</div>
+        <h2 class="display-md">Not built for one industry.<br>Built for one kind of relationship.</h2>
+        <p class="sub">Tap your business to see how a typical month looks.</p>
+      </div>
+
+      <div class="industries-wrap" id="industryPills" role="group" aria-label="Choose your industry">
+        <button class="badge-pill" aria-pressed="true" data-key="studio">Photo studios</button>
+        <button class="badge-pill" aria-pressed="false" data-key="dental">Dental clinics</button>
+        <button class="badge-pill" aria-pressed="false" data-key="gym">Gyms & wellness</button>
+        <button class="badge-pill" aria-pressed="false" data-key="jewel">Boutiques & jewellers</button>
+        <button class="badge-pill" aria-pressed="false" data-key="estate">Real-estate agents</button>
+        <button class="badge-pill" aria-pressed="false" data-key="food">Restaurants & caterers</button>
+        <button class="badge-pill" aria-pressed="false" data-key="salon">Salons & spas</button>
+        <button class="badge-pill" aria-pressed="false" data-key="auto">Garages & dealerships</button>
+        <button class="badge-pill" aria-pressed="false" data-key="tuition">Tuition academies</button>
+        <button class="badge-pill" aria-pressed="false" data-key="freelance">Freelancers & consultants</button>
+      </div>
+
+      <div class="industry-detail" id="industryDetail" aria-live="polite">
+        <div class="ind-name">Photo studios</div>
+        <div class="ind-copy">Shoot anniversaries and family birthdays are your repeat-booking windows. A greeting on the day keeps you first when they want the next album.</div>
+        <div class="ind-eg">26 Sep → "Happy Anniversary, Anita & Rohit — from all of us at Shree Studio 🎉"</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORNING QUOTES CAROUSEL -->
+  <section class="band-soft">
+    <div class="wrap" style="max-width: 860px;">
+      <div class="section-head center">
+        <div class="section-eyebrow-label">A morning with MomentOS</div>
+        <h2 class="display-md">What the first five minutes look like</h2>
+      </div>
+
+      <div class="carousel reveal" id="carousel">
+        <div class="rating-stars" role="img" aria-label="Rated 5 out of 5">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#fb923c"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#fb923c"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#fb923c"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#fb923c"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#fb923c"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+        </div>
+
+        <div class="slides" id="slides">
+          <div class="slide active">
+            <blockquote>"Chai, open the app, six greetings due, press send, done before the first sip. It used to be half an hour — and I still wasn't sure I hadn't missed someone."</blockquote>
+            <div class="quote-attrib">
+              <div class="avatar-circle" style="background: rgba(251,146,60,0.18);">PS</div>
+              <div><div class="quote-name">Photo studio owner</div><div class="quote-role">Typical morning · illustrative</div></div>
+            </div>
+          </div>
+          <div class="slide">
+            <blockquote>"The family list is the part I could never keep straight. Now the spouse and the parents get greeted on the right day too, and nobody's number is stored in three different notes apps."</blockquote>
+            <div class="quote-attrib">
+              <div class="avatar-circle" style="background: rgba(139,92,246,0.16);">DC</div>
+              <div><div class="quote-name">Dental clinic front desk</div><div class="quote-role">Typical morning · illustrative</div></div>
+            </div>
+          </div>
+          <div class="slide">
+            <blockquote>"One member's number was wrong for months and I never knew. It showed up as flagged instead of silently failing — that's when I trusted it."</blockquote>
+            <div class="quote-attrib">
+              <div class="avatar-circle" style="background: rgba(52,211,153,0.18);">GF</div>
+              <div><div class="quote-name">Gym owner</div><div class="quote-role">Typical morning · illustrative</div></div>
+            </div>
+          </div>
+          <div class="slide">
+            <blockquote>"I write one message a season. Everyone still gets their own name in it, so it never feels like a blast — my clients reply to it, which they never did before."</blockquote>
+            <div class="quote-attrib">
+              <div class="avatar-circle" style="background: rgba(236,72,153,0.16);">JB</div>
+              <div><div class="quote-name">Jewellery boutique</div><div class="quote-role">Typical morning · illustrative</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-controls">
+          <div class="dots" id="dots"></div>
+          <div class="arrow-row">
+            <button class="btn-icon-circle" id="pauseBtn" type="button" aria-label="Pause carousel" aria-pressed="false">
+              <svg class="ico-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>
+              <svg class="ico-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6a1 1 0 0 0 1.53.85l10.6-6.8a1 1 0 0 0 0-1.7L9.53 4.35A1 1 0 0 0 8 5.2z"/></svg>
+            </button>
+            <button class="btn-icon-circle" id="prevBtn" aria-label="Previous quote"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="btn-icon-circle" id="nextBtn" aria-label="Next quote"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOUNDARIES -->
+  <section id="boundaries">
+    <div class="wrap" style="max-width: 780px;">
+      <div class="section-head">
+        <div class="section-eyebrow-label">What it isn't</div>
+        <h2 class="display-md">Being honest about the boundaries</h2>
+        <p class="sub">Good tools are clear about what they deliberately don't do. So are we.</p>
+      </div>
+
+      <div class="boundary-list">
+        <div class="boundary-item">
+          <div class="boundary-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <p><strong>It doesn't create the greeting images.</strong> You design them however you already do — MomentOS stores, shows, and sends them.</p>
+        </div>
+        <div class="boundary-item">
+          <div class="boundary-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <p><strong>It isn't a marketing platform.</strong> No ad blasts, no campaigns — just personal, occasion-based greetings.</p>
+        </div>
+        <div class="boundary-item">
+          <div class="boundary-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <p><strong>It isn't a multi-business platform.</strong> One business runs its own copy — no shared cloud, no team accounts.</p>
+        </div>
+        <div class="boundary-item">
+          <div class="boundary-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <p><strong>It doesn't send automatically — not yet.</strong> A person presses the button, by design, for a final review before anything goes out.</p>
+        </div>
+        <div class="boundary-item">
+          <div class="boundary-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <p><strong>It doesn't touch your other chats.</strong> Nothing beyond the greeting messages it sends.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="band-soft">
+    <div class="wrap" style="max-width: 860px;">
+      <div class="section-head center">
+        <div class="section-eyebrow-label">Questions</div>
+        <h2 class="display-md">Before you message us</h2>
+      </div>
+
+      <div class="faq-list" id="faqList">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="true">Do my clients need to install anything?<span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span></button>
+          <div class="faq-a"><div class="inner">No. They receive an ordinary WhatsApp message from your own number — exactly the message they'd get if you'd typed it yourself. MomentOS is only on your side.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Will it look like an automated blast?<span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span></button>
+          <div class="faq-a"><div class="inner">Each message is written with that person's own name, sent individually, and paced with a human-like pause between sends. There's no "Dear Customer" and no mass recipient list on the receiving end.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">What happens if my internet drops mid-send?<span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span></button>
+          <div class="faq-a"><div class="inner">The run stops at that exact point. Nothing is marked as sent unless it actually went out. When you press send again later, it resumes from the first person who's still pending.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Can I greet family members too?<span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span></button>
+          <div class="faq-a"><div class="inner">Yes — that's a first-class feature, not an add-on. A client can have any number of recipients attached: spouse, parents, siblings, each with their own WhatsApp number and their own occasions.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Do you need my WhatsApp password?<span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span></button>
+          <div class="faq-a"><div class="inner">Never. You link by scanning a QR code, the same way you link WhatsApp Web. Your access is kept in one protected place, separate from the screens you click through, and it's never exposed to the website.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">How long does setup take?<span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span></button>
+          <div class="faq-a"><div class="inner">Most businesses are sending the same day. If you already have a spreadsheet of clients, import it, confirm the flagged rows, write one template per occasion type, and you're done — occasions repeat every year on their own.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="cta-band-light reveal">
+        <h2 class="display-sm">One review. One click. Nobody forgotten.</h2>
+        <p class="sub">Tell us about your business and we'll help you get set up — usually the same day.</p>
+        <div class="cta-band-actions">
+          <a href="https://wa.me/917574996656" class="btn btn-primary btn-lg">Message us on WhatsApp</a>
+          <a href="tel:+917574996656" class="btn btn-secondary btn-lg">Call +91 75749 96656</a>
+        </div>
+        <div class="cta-meta">
+          <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg>No app for your clients</span>
+          <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg>Your own WhatsApp number</span>
+          <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg>Set up once a year</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="wordmark"><span class="wordmark-dot"></span>MomentOS</a>
+        <p>A personal system for remembering and greeting life's special moments — one business, one WhatsApp number, one click a day.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#value">Why it matters</a></li>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="#safeguards">Why it's safe</a></li>
+          <li><a href="#boundaries">What it isn't</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#industries">Who it's for</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="https://wa.me/917574996656">WhatsApp us</a></li>
+          <li><a href="tel:+917574996656">+91 75749 96656</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MomentOS. One business, one moment at a time.</span>
+      <span>Built for businesses that know their clients by name.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-cta">
+  <a href="https://wa.me/917574996656" class="btn btn-primary">Message us on WhatsApp</a>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, reduce ? 0 : ms); }); };
+
+  /* Roving-tabindex arrow navigation for a [role=tablist] (APG tabs pattern) */
+  function arrowNav(e, current, attr, apply) {
+    var dir = 0;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") dir = 1;
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") dir = -1;
+    else return;
+    var list = Array.prototype.slice.call(current.parentNode.querySelectorAll('[role="tab"]'));
+    var i = list.indexOf(current);
+    if (i < 0 || !list.length) return;
+    e.preventDefault();
+    var next = list[(i + dir + list.length) % list.length];
+    apply(next.getAttribute(attr));
+    next.focus();
+  }
+
+  /* ---------- Nav: scroll state + progress + active link ---------- */
+  var nav = document.getElementById("topNav");
+  var progress = document.getElementById("scrollProgress");
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll("#navMenu a"));
+  var sections = navLinks.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+
+  function onScroll() {
+    var y = window.scrollY || document.documentElement.scrollTop;
+    nav.classList.toggle("scrolled", y > 8);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
+
+    var idx = -1;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i] && sections[i].getBoundingClientRect().top <= 140) idx = i;
+    }
+    navLinks.forEach(function (a, i) { a.classList.toggle("active", i === idx); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- Mobile sheet ---------- */
+  var burger = document.getElementById("hamburger");
+  var sheet = document.getElementById("mobileSheet");
+  function closeSheet() {
+    sheet.classList.remove("open");
+    burger.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+  burger.addEventListener("click", function () {
+    var open = sheet.classList.toggle("open");
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+    document.body.style.overflow = open ? "hidden" : "";
+  });
+  sheet.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") closeSheet();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeSheet();
+  });
+
+  /* ---------- Reveal on scroll ---------- */
+  var revealEls = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduce) {
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("in"); ro.unobserve(en.target); }
+      });
+    }, { threshold: 0.14, rootMargin: "0px 0px -40px 0px" });
+    revealEls.forEach(function (el) { ro.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* ---------- Counters ---------- */
+  var counters = document.querySelectorAll("[data-count]");
+  function animateCount(el) {
+    var target = parseInt(el.getAttribute("data-count"), 10) || 0;
+    if (reduce || target === 0) { el.textContent = target; return; }
+    var start = performance.now(), dur = 1100;
+    function tick(now) {
+      var p = Math.min((now - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased);
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if ("IntersectionObserver" in window) {
+    var co = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { animateCount(en.target); co.unobserve(en.target); }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (c) { co.observe(c); });
+  } else {
+    counters.forEach(function (c) { c.textContent = c.getAttribute("data-count"); });
+  }
+
+  /* ---------- Hero mock: interactive send ---------- */
+  var rows = Array.prototype.slice.call(document.querySelectorAll("#heroRows .greet-row"));
+  var sendBtn = document.getElementById("mockSendBtn");
+  var progressEl = document.getElementById("mockProgress");
+  var hint = document.getElementById("mockHint");
+  var flash = document.getElementById("mockFlash");
+  var statSent = document.getElementById("statSent");
+  var statLeft = document.getElementById("statLeft");
+  var busy = false;
+
+  function rowStatus(row) {
+    return row.querySelector(".greet-status");
+  }
+  function syncStats() {
+    var sent = rows.filter(function (r) { return r.getAttribute("data-state") === "sent"; }).length;
+    statSent.textContent = sent;
+    statLeft.textContent = rows.length - sent;
+    progressEl.textContent = sent + " of " + rows.length + " done";
+    return sent;
+  }
+
+  async function runSend() {
+    if (busy) return;
+    var pending = rows.filter(function (r) { return r.getAttribute("data-state") !== "sent"; });
+    if (!pending.length) {
+      rows.forEach(function (r, i) {
+        r.setAttribute("data-state", i < 2 ? "sent" : "ready");
+        var s = rowStatus(r);
+        s.className = "greet-status " + (i < 2 ? "status-sent" : "status-ready");
+        s.textContent = i < 2 ? "Sent" : "Ready";
+      });
+      syncStats();
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send Today's Greetings";
+      if (hint) hint.style.visibility = "visible";
+      return;
+    }
+    busy = true;
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending…";
+    if (hint) hint.style.visibility = "hidden";
+
+    for (var i = 0; i < pending.length; i++) {
+      var r = pending[i];
+      var st = rowStatus(r);
+      r.setAttribute("data-state", "sending");
+      st.className = "greet-status status-sending";
+      st.textContent = "Sending…";
+      syncStats();
+      await wait(750);
+      r.setAttribute("data-state", "sent");
+      st.className = "greet-status status-sent";
+      st.textContent = "Sent";
+      syncStats();
+      await wait(300);
+    }
+
+    flash.classList.remove("go");
+    void flash.offsetWidth;
+    flash.classList.add("go");
+    sendBtn.disabled = false;
+    sendBtn.textContent = "All sent — tap to reset";
+    busy = false;
+  }
+  sendBtn.addEventListener("click", runSend);
+  syncStats();
+
+  /* ---------- Date label ---------- */
+  var d = new Date();
+  var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var dateEl = document.getElementById("mockDate");
+  if (dateEl) dateEl.textContent = days[d.getDay()] + ", " + d.getDate() + " " + months[d.getMonth()];
+
+  /* ---------- How it works: step tabs ---------- */
+  var stepTabs = Array.prototype.slice.call(document.querySelectorAll("[data-step]"));
+  var panels = Array.prototype.slice.call(document.querySelectorAll("[data-panel]"));
+
+  stepTabs.forEach(function (t) {
+    var n = t.getAttribute("data-step");
+    if (t.classList.contains("category-tab")) t.id = "stepTab" + n;
+    t.setAttribute("aria-controls", "stepPanel" + n);
+  });
+  panels.forEach(function (p) {
+    p.id = "stepPanel" + p.getAttribute("data-panel");
+    p.setAttribute("role", "tabpanel");
+    p.setAttribute("aria-labelledby", "stepTab" + p.getAttribute("data-panel"));
+  });
+
+  function selectStep(n) {
+    stepTabs.forEach(function (t) {
+      var on = String(n) === t.getAttribute("data-step");
+      if (t.hasAttribute("role")) {
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.setAttribute("tabindex", on ? "0" : "-1");
+      }
+    });
+    panels.forEach(function (p) {
+      var on = String(n) === p.getAttribute("data-panel");
+      if (on) p.removeAttribute("hidden"); else p.setAttribute("hidden", "");
+    });
+  }
+  stepTabs.forEach(function (t) {
+    t.addEventListener("click", function () { selectStep(t.getAttribute("data-step")); });
+    t.addEventListener("keydown", function (e) {
+      arrowNav(e, t, "data-step", function (v) { selectStep(v); });
+    });
+  });
+  selectStep(0);
+
+  /* ---------- Live template preview ---------- */
+  var nameIn = document.getElementById("tplName");
+  var bizIn = document.getElementById("tplBiz");
+  var outName = document.getElementById("outName");
+  var outBiz = document.getElementById("outBiz");
+  var tplCount = document.getElementById("tplCount");
+  function syncTpl() {
+    var n = (nameIn.value || "").trim() || "Recipient";
+    var b = (bizIn.value || "").trim() || "Your Business";
+    outName.textContent = n;
+    outBiz.textContent = b;
+    var len = ("Dear " + n + ", wishing you a very Happy Anniversary! 🎉 Thank you for letting " + b + " be part of your journey.").length;
+    tplCount.textContent = len + " chars";
+  }
+  if (nameIn && bizIn) {
+    nameIn.addEventListener("input", syncTpl);
+    bizIn.addEventListener("input", syncTpl);
+    syncTpl();
+  }
+
+  /* ---------- Send-run demo (step 4) ---------- */
+  var runBtn = document.getElementById("runDemoBtn");
+  var sendLines = Array.prototype.slice.call(document.querySelectorAll("#sendRun .send-line"));
+  var running = false;
+  if (runBtn) {
+    runBtn.addEventListener("click", async function () {
+      if (running) return;
+      running = true;
+      runBtn.disabled = true;
+      runBtn.textContent = "Sending…";
+      sendLines.forEach(function (l) {
+        l.className = "send-line";
+        l.querySelector(".state").textContent = "queued";
+      });
+      for (var i = 0; i < sendLines.length; i++) {
+        var line = sendLines[i];
+        line.classList.add("active");
+        line.querySelector(".state").textContent = "sending";
+        await wait(700);
+        line.classList.remove("active");
+        line.classList.add("done");
+        line.querySelector(".state").textContent = "delivered ✓";
+        await wait(320);
+      }
+      runBtn.disabled = false;
+      runBtn.textContent = "Run it again";
+      running = false;
+    });
+  }
+
+  /* ---------- Safeguards view toggle ---------- */
+  var modeTabs = Array.prototype.slice.call(document.querySelectorAll(".safeguard-toolbar [data-mode]"));
+  var table = document.getElementById("safeguardTable");
+  table.setAttribute("role", "tabpanel");
+  modeTabs.forEach(function (t, i) {
+    t.id = "modeTab" + i;
+    t.setAttribute("aria-controls", table.id);
+    t.setAttribute("tabindex", t.getAttribute("aria-selected") === "true" ? "0" : "-1");
+  });
+  table.setAttribute("aria-labelledby", "modeTab0");
+
+  function setMode(t) {
+    modeTabs.forEach(function (x) {
+      var on = x === t;
+      x.setAttribute("aria-selected", on ? "true" : "false");
+      x.setAttribute("tabindex", on ? "0" : "-1");
+      if (on) table.setAttribute("aria-labelledby", x.id);
+    });
+    table.setAttribute("data-mode", t.getAttribute("data-mode"));
+  }
+  modeTabs.forEach(function (t) {
+    t.addEventListener("click", function () { setMode(t); });
+    t.addEventListener("keydown", function (e) {
+      arrowNav(e, t, "data-mode", function (v) {
+        for (var i = 0; i < modeTabs.length; i++) {
+          if (modeTabs[i].getAttribute("data-mode") === v) setMode(modeTabs[i]);
+        }
+      });
+    });
+  });
+
+  /* ---------- Industries ---------- */
+  var IND = {
+    studio: ["Photo studios", "Shoot anniversaries and family birthdays are your repeat-booking windows. A greeting on the day keeps you first when they want the next album.", "26 Sep → \"Happy Anniversary, Anita & Rohit — from all of us at Shree Studio 🎉\""],
+    dental: ["Dental clinics", "Check-up anniversaries and kids' birthdays are natural recall moments — a warm message does the follow-up your front desk never has time for.", "12 Oct → \"Happy Birthday, Aarav! Hope the new braces are treating you well 🦷\""],
+    gym: ["Gyms & wellness", "Member birthdays and joining anniversaries are when people quietly decide whether to renew. Be the message that lands that day.", "3 Feb → \"Happy Birthday, Neha — here's to another strong year 💪\""],
+    jewel: ["Boutiques & jewellers", "Purchase anniversaries and family occasions are your highest-intent days of the year. A personal note brings them back to the counter.", "18 Nov → \"Happy Anniversary, Priya & Sameer — from all of us at Mehta Jewels ✨\""],
+    estate: ["Real-estate agents", "Home-buying anniversaries and family milestones keep you in the loop long after the deal closes — that's where the referrals come from.", "9 Jan → \"Happy 3 years in the new home, the Sharmas! 🏡\""],
+    food: ["Restaurants & caterers", "Regulars celebrate with food. Greeting them before they plan the party is how you get the booking instead of the competitor.", "21 Dec → \"Happy Birthday, Mr. Iyer — your usual table is waiting 🎂\""],
+    salon: ["Salons & spas", "Client birthdays turn into gift-card sales and party bookings. One message a month keeps your chair top of mind.", "7 Aug → \"Happy Birthday, Kavya — time for a refresh? 💇‍♀️\""],
+    auto: ["Garages & dealerships", "Service anniversaries and vehicle purchase dates are perfect prompts — gentle, useful, never salesy.", "14 Apr → \"Happy 2 years with your Swift, Rohan — service due next month 🔧\""],
+    tuition: ["Tuition academies", "Student birthdays and result-day milestones make parents feel seen — and they're the ones who refer the next batch.", "30 Jun → \"Happy Birthday, Ishita! Ready for the next chapter 📚\""],
+    freelance: ["Freelancers & consultants", "Client anniversaries are the cheapest business development you'll ever do. One line, once a year, keeps the account warm.", "5 Sep → \"Happy 4 years working together, Anand — thank you for the trust 🙏\""]
+  };
+  var pills = Array.prototype.slice.call(document.querySelectorAll("#industryPills .badge-pill"));
+  var detail = document.getElementById("industryDetail");
+  pills.forEach(function (p) {
+    p.addEventListener("click", function () {
+      pills.forEach(function (x) { x.setAttribute("aria-pressed", x === p ? "true" : "false"); });
+      var data = IND[p.getAttribute("data-key")];
+      if (!data) return;
+      detail.style.opacity = "0";
+      detail.style.transform = "translateY(6px)";
+      setTimeout(function () {
+        detail.innerHTML =
+          '<div class="ind-name">' + data[0] + "</div>" +
+          '<div class="ind-copy">' + data[1] + "</div>" +
+          '<div class="ind-eg">' + data[2] + "</div>";
+        detail.style.transition = "opacity 260ms ease, transform 260ms ease";
+        detail.style.opacity = "1";
+        detail.style.transform = "none";
+      }, reduce ? 0 : 160);
+    });
+  });
+
+  /* ---------- Carousel ---------- */
+  var slides = Array.prototype.slice.call(document.querySelectorAll("#slides .slide"));
+  var dotsWrap = document.getElementById("dots");
+  var idx = 0, timer = null;
+
+  slides.forEach(function (_, i) {
+    var b = document.createElement("button");
+    b.className = "dot-btn";
+    b.type = "button";
+    b.setAttribute("aria-label", "Quote " + (i + 1));
+    b.setAttribute("aria-current", i === 0 ? "true" : "false");
+    b.addEventListener("click", function () { go(i); restart(); });
+    dotsWrap.appendChild(b);
+  });
+
+  function go(n) {
+    idx = (n + slides.length) % slides.length;
+    slides.forEach(function (s, i) {
+      var on = i === idx;
+      s.classList.toggle("active", on);
+      s.setAttribute("aria-hidden", on ? "false" : "true");
+    });
+    Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
+      d.setAttribute("aria-current", i === idx ? "true" : "false");
+    });
+  }
+
+  var pauseBtn = document.getElementById("pauseBtn");
+  var paused = false, inView = true;
+
+  function restart() {
+    if (timer) { clearInterval(timer); timer = null; }
+    if (!reduce && !paused && inView) timer = setInterval(function () { go(idx + 1); }, 6500);
+  }
+  function setPaused(v) {
+    paused = v;
+    pauseBtn.setAttribute("aria-pressed", v ? "true" : "false");
+    pauseBtn.setAttribute("aria-label", v ? "Play carousel" : "Pause carousel");
+    pauseBtn.classList.toggle("is-paused", v);
+    restart();
+  }
+
+  document.getElementById("prevBtn").addEventListener("click", function () { go(idx - 1); restart(); });
+  document.getElementById("nextBtn").addEventListener("click", function () { go(idx + 1); restart(); });
+  pauseBtn.addEventListener("click", function () { setPaused(!paused); });
+
+  var carousel = document.getElementById("carousel");
+  carousel.addEventListener("mouseenter", function () { if (timer) { clearInterval(timer); timer = null; } });
+  carousel.addEventListener("mouseleave", restart);
+  carousel.addEventListener("focusin", function () { if (timer) { clearInterval(timer); timer = null; } });
+  carousel.addEventListener("focusout", restart);
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      inView = entries[0].isIntersecting;
+      restart();
+    }, { threshold: 0.15 }).observe(carousel);
+  }
+  go(0);
+  restart();
+
+  /* ---------- FAQ accordion ---------- */
+  var faqBtns = Array.prototype.slice.call(document.querySelectorAll(".faq-q"));
+  function setOpen(btn, open) {
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    var panel = btn.nextElementSibling;
+    panel.style.maxHeight = open ? panel.scrollHeight + "px" : "0px";
+  }
+  faqBtns.forEach(function (btn, i) {
+    var panel = btn.nextElementSibling;
+    btn.id = "faqQ" + i;
+    btn.setAttribute("aria-controls", "faqA" + i);
+    panel.id = "faqA" + i;
+    panel.setAttribute("role", "region");
+    panel.setAttribute("aria-labelledby", btn.id);
+    setOpen(btn, btn.getAttribute("aria-expanded") === "true");
+    btn.addEventListener("click", function () {
+      var isOpen = btn.getAttribute("aria-expanded") === "true";
+      faqBtns.forEach(function (b) { setOpen(b, false); });
+      setOpen(btn, !isOpen);
+    });
+  });
+  window.addEventListener("resize", function () {
+    faqBtns.forEach(function (b) {
+      if (b.getAttribute("aria-expanded") === "true") {
+        var p = b.nextElementSibling;
+        p.style.maxHeight = p.scrollHeight + "px";
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
